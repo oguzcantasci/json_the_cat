@@ -1,18 +1,22 @@
 const request = require(`request`);
 
-const breed = process.argv[2]; // Get the breed name from commandline
+const fetchBreedDescription = function(breed, callback) {
+  request(`https://api.therrcatapi.com/v1/breeds/search?name=${breed}`, (error, response, body) => {
+    if (error) { // Handle request errors
+      callback(`Request error: ${error.errno}`, null);
+      process.exit();
+    }
 
-request(`https://api.thecatapi.com/v1/breeds/search?name=${breed}`, (error, response, body) => {
-  if (error) { // Handle request errors
-    console.log("!!!!!!Error!!!!!!\n",
-      `Error Numner: ${error.errno}\n`,
-      `Error Code: ${error.code}`);
-  }
+    const data = JSON.parse(body)[0];
+    if (data) { // Handle breed name errors
+      callback(null, data.description);
+    } else {
+      callback(`Couldn't find a ${breed} breed`, null);
+    }
 
-  const data = JSON.parse(body);
-  if (data.length === 0) { // Handle breed name errors
-    console.log("Breed not found");
-    process.exit();
-  }
-  console.log(data[0].description);
-});
+  });
+};
+
+module.exports = {fetchBreedDescription};
+
+
