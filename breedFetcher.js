@@ -1,7 +1,7 @@
 const request = require(`request`);
 
 const fetchBreedDescription = function(breed, callback) {
-  request(`https://api.therrcatapi.com/v1/breeds/search?name=${breed}`, (error, response, body) => {
+  request(`https://api.thecatapi.com/v1/breeds/search?name=${breed}`, (error, response, body) => {
     if (error) { // Handle request errors
       callback(`Request error: ${error.errno}`, null);
       process.exit();
